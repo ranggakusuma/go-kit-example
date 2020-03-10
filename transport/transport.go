@@ -11,7 +11,7 @@ import (
 )
 
 // ErrBadRequest is error message for bad request
-var ErrBadRequest = errors.New("Request not valid cooy")
+var ErrBadRequest = errors.New("Request not valid")
 
 // DecodeSearchRequest is function for decode search request
 func DecodeSearchRequest(_ context.Context, r *http.Request) (interface{}, error) {
@@ -24,7 +24,10 @@ func DecodeSearchRequest(_ context.Context, r *http.Request) (interface{}, error
 	} else {
 		resInt, err := strconv.Atoi(strPagination)
 		if err != nil {
-			return nil, ErrBadRequest
+			return endpoint.SearchRequest{
+				SearchWord: searchWord,
+				Pagination: 1,
+			}, nil
 		}
 		pagination = resInt
 	}
