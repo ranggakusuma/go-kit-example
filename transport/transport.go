@@ -1,4 +1,4 @@
-package main
+package transport
 
 import (
 	"context"
@@ -6,12 +6,15 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+
+	"github.com/ranggakusuma/go-kit-example/endpoint"
 )
 
 // ErrBadRequest is error message for bad request
 var ErrBadRequest = errors.New("Request not valid cooy")
 
-func decodeSearchRequest(_ context.Context, r *http.Request) (interface{}, error) {
+// DecodeSearchRequest is function for decode search request
+func DecodeSearchRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	searchWord := r.FormValue("searchword")
 	strPagination := r.FormValue("pagination")
 	pagination := 0
@@ -26,12 +29,13 @@ func decodeSearchRequest(_ context.Context, r *http.Request) (interface{}, error
 		pagination = resInt
 	}
 
-	return SearchRequest{
+	return endpoint.SearchRequest{
 		SearchWord: searchWord,
 		Pagination: pagination,
 	}, nil
 }
 
-func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+// EncodeResponse is function for encode response
+func EncodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
 }
