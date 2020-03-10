@@ -16,12 +16,9 @@ type SearchRequest struct {
 
 // SearchResponse represent response for Search method
 type SearchResponse struct {
-	Title  string `json:"title"`
-	Year   string `json:"year"`
-	ImdbID string `json:"imdbID"`
-	Type   string `json:"type"`
-	Poster string `json:"poster"`
-	Err    error  `json:"error,omitempty"`
+	Search       []*service.Movie `json:"search"`
+	TotalResults int              `json:"totalResults"`
+	Err          string           `json:"error,omitempty"`
 }
 
 // ErrRequestNotFound is error message for request not found
@@ -43,10 +40,13 @@ func MakeEndpoints(s service.MovieService) Endpoints {
 func MakeSearchEndpoint(svc service.MovieService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(SearchRequest)
-		v, err := svc.Search(ctx, req.SearchWord, req.Pagination)
+		results, totalResults, err := svc.Search(ctx, req.SearchWord, req.Pagination)
 		if err != nil {
-			return SearchResponse{Err: ErrRequestNotFound}, err
+			return SearchResponse{Err: err.Error()}, nil
 		}
-		return SearchResponse{Title: v}, nil
+		return SearchResponse{
+			Search:       results,
+			TotalResults: totalResults,
+		}, nil
 	}
 }

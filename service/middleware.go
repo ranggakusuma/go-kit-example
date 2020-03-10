@@ -23,11 +23,11 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 }
 
-func (l loggingMiddleware) Search(ctx context.Context, searchWord string, pagination int) (output string, err error) {
+func (l loggingMiddleware) Search(ctx context.Context, searchWord string, pagination int) (movieList []*Movie, totalResults int, err error) {
 	defer func() {
 		l.logger.Log("method", "Search", "searchWord", searchWord, "pagination", pagination, "err", err)
 	}()
 
-	output, err = l.next.Search(ctx, searchWord, pagination)
+	movieList, totalResults, err = l.next.Search(ctx, searchWord, pagination)
 	return
 }

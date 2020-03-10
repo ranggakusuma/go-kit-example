@@ -1,67 +1,74 @@
 package service
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 
 	"github.com/ranggakusuma/go-kit-example/utils"
 )
 
 // MovieService provide operations in movie service
 type MovieService interface {
-	Search(ctx context.Context, searchWord string, pagination int) (string, error)
+	Search(ctx context.Context, searchWord string, pagination int) ([]*Movie, int, error)
 }
 
 type basicMovieService struct{}
+
+// Movie represent response movie from omdb
+type Movie struct {
+	Title  string `json:"Title"`
+	Year   string `json:"Year"`
+	ImdbID string `json:"imdbID"`
+	Type   string `json:"Type"`
+	Poster string `json:"Poster"`
+}
 
 // NewBasicMovieService is stateless of implementation of MovieService
 func NewBasicMovieService() MovieService {
 	return &basicMovieService{}
 }
 
-type responseOmdb struct {
-	Response string `json:"Response"`
-}
+func (basicMovieService) Search(ctx context.Context, searchWord string, pagination int) ([]*Movie, int, error) {
 
-func (basicMovieService) Search(ctx context.Context, searchWord string, pagination int) (string, error) {
-
-	client := &http.Client{}
+	//client := &http.Client{}
 	apiKey := os.Getenv("OMDB_KEY")
-	m := responseOmdb{}
+	m := map[string]interface{}{}
+	result := []*Movie{}
 
 	queryURL := fmt.Sprintf("%s?apikey=%s&s=%s&page=%d", utils.OmdbURL, apiKey, url.PathEscape(searchWord), pagination)
-	fmt.Println(queryURL)
-	req, err := http.NewRequest("GET", queryURL, bytes.NewBuffer(nil))
-	// res, err := http.Get(queryURL)
-	// req.Header.Add("Content-Type", "application/json")
+	//req, err := http.NewRequest("GET", queryURL, bytes.NewBuffer(nil))
 
-	if err != nil {
-		// handle error
-		return "", err
-	}
+	// if err != nil {
+	//	return nil, 0, err
+	// }
 
-	res, err := client.Do(req)
+	//res, err := client.Do(req)
+	res, err := http.Get(queryURL)
 	if err != nil {
-		return "", nil
+		return nil, 0, nil
 	}
 	err = json.NewDecoder(res.Body).Decode(&m)
 	if err != nil {
-		return "", err
+		return nil, 0, err
 	}
 
-	//err = json.Unmarshal(json.NewDecoder(res.Body).Decode(&m))
-	// resJson, err := json.Marshal(res.Body)
-	// if err != nil {
-	// 	return "", nil
-	// }
+	if m["Response"].(string) == "False" {
+		return nil, 0, errors.New(m["Error"].(string))
+	}
 
-	// json.Unmarshal(resJson, &m)
+	for _, v := range m["Search"].([]interface{}) {
+		mov := new(Movie)
+		b, _ := json.Marshal(v)
+		_ = json.Unmarshal(b, &mov)
+		result = append(result, mov)
+	}
 
-	fmt.Println(m, "response ===")
-	return searchWord + "oke oke", nil
+	totalPage, _ := strconv.Atoi(m["totalResults"].(string))
+	return result, totalPage, nil
 }
