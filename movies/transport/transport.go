@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/ranggakusuma/go-kit-example/endpoint"
+	"github.com/ranggakusuma/go-kit-example/movies/endpoint"
 )
 
 // ErrBadRequest is error message for bad request

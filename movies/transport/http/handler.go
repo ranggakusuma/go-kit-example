@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/ranggakusuma/go-kit-example/endpoint"
-	"github.com/ranggakusuma/go-kit-example/transport"
+	"github.com/ranggakusuma/go-kit-example/movies/endpoint"
+	"github.com/ranggakusuma/go-kit-example/movies/transport"
 
 	"github.com/go-kit/kit/log"
 	httptransport "github.com/go-kit/kit/transport/http"

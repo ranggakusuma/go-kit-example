@@ -7,11 +7,11 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/joho/godotenv"
-	"github.com/ranggakusuma/go-kit-example/endpoint"
-	"github.com/ranggakusuma/go-kit-example/service"
+	"github.com/ranggakusuma/go-kit-example/movies/endpoint"
+	"github.com/ranggakusuma/go-kit-example/movies/service"
 
-	grpchandler "github.com/ranggakusuma/go-kit-example/transport/grpc"
-	"github.com/ranggakusuma/go-kit-example/transport/grpc/pb"
+	grpchandler "github.com/ranggakusuma/go-kit-example/movies/transport/grpc"
+	"github.com/ranggakusuma/go-kit-example/movies/transport/grpc/pb"
 	grpc "google.golang.org/grpc"
 )
 

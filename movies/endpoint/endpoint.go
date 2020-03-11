@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/ranggakusuma/go-kit-example/service"
+	"github.com/ranggakusuma/go-kit-example/movies/service"
 )
 
 // SearchRequest represent request for Search method

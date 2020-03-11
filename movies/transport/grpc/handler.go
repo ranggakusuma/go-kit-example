@@ -6,8 +6,8 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/transport/grpc"
-	"github.com/ranggakusuma/go-kit-example/endpoint"
-	"github.com/ranggakusuma/go-kit-example/transport/grpc/pb"
+	"github.com/ranggakusuma/go-kit-example/movies/endpoint"
+	"github.com/ranggakusuma/go-kit-example/movies/transport/grpc/pb"
 )
 
 // NewGRPCServer makes a set of endpoints available as a gRPC AddServer

@@ -10,7 +10,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/ranggakusuma/go-kit-example/utils"
+	"github.com/ranggakusuma/go-kit-example/movies/utils"
 )
 
 // MovieService provide operations in movie service
