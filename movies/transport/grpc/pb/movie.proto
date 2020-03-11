@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package pb;
+
+// Movie service definition
+service Movie {
+	rpc Search(SearchMovieRequest) returns (SearchMovieResponse); 
+}
+
+// SearchMovieRequest represent request for searching movie
+message SearchMovieRequest {
+	string searchWord = 1;
+	int64 pagination = 2;
+}
+
+// Movie represent attributes of movie
+message MovieAttr {
+	string title = 1;
+	string year = 2;
+	string imdbID = 3;
+	string type = 4;
+	string poster = 5;
+}
+
+// SearchMovieResponse represent response for searched movie
+message SearchMovieResponse {
+	repeated MovieAttr list = 1;
+	int64 totalResult = 2; 
+}
