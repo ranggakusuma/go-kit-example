@@ -1,0 +1,12 @@
+version: "3"
+services:
+  movies:
+    build:
+      context: .
+      dockerfile: movies/Dockerfile
+    restart: always
+    volumes:
+    - .:/go/src/github.com/ranggakusuma/go-kit-example
+    container_name: movies
+    ports:
+    - 8081:8081
