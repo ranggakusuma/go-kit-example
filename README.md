@@ -6,10 +6,10 @@ Before start this project please install:
  - [Docker](https://www.docker.com)
  - [Docker compose](https://docs.docker.com/compose/install/)
 
-### Get Started
+### Getting Started
 
 ```shell
-$ go get github.com/ranggakusuma/go-kit-example
+$ git clone https://github.com/ranggakusuma/go-kit-example.git
 $ docker-compose up
 ```
 
