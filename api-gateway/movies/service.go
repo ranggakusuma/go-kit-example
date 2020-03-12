@@ -17,7 +17,7 @@ var ErrInvalidArgument = errors.New("invalid argument")
 
 // Service is the interface that provides list of movies service.
 type Service interface {
-	SearchMovies(ctx context.Context, request searchMovieRequest) (searchMovieResponse, error)
+	SearchMovies(ctx context.Context, request SearchMovieRequest) (SearchMovieResponse, error)
 }
 
 type movieService struct {
@@ -40,14 +40,14 @@ func NewService() Service {
 
 }
 
-func (m movieService) SearchMovies(ctx context.Context, request searchMovieRequest) (searchMovieResponse, error) {
+func (m movieService) SearchMovies(ctx context.Context, request SearchMovieRequest) (SearchMovieResponse, error) {
 	reply, err := m.movieServiceClient.Search(context.Background(), &pb.SearchMovieRequest{
 		SearchWord: request.SearchWord,
 		Pagination: int64(request.Pagination),
 	})
 
 	if err != nil {
-		return searchMovieResponse{
+		return SearchMovieResponse{
 			Err: err,
 		}, nil
 	}
@@ -63,7 +63,7 @@ func (m movieService) SearchMovies(ctx context.Context, request searchMovieReque
 		})
 	}
 
-	return searchMovieResponse{
+	return SearchMovieResponse{
 		Search:       searchResults,
 		TotalResults: int(reply.GetTotalResult()),
 	}, nil

@@ -38,7 +38,7 @@ func decodeSearchMoviesRequest(_ context.Context, r *http.Request) (interface{},
 	} else {
 		resInt, err := strconv.Atoi(strPagination)
 		if err != nil {
-			return searchMovieRequest{
+			return SearchMovieRequest{
 				SearchWord: searchWord,
 				Pagination: 1,
 			}, nil
@@ -46,7 +46,7 @@ func decodeSearchMoviesRequest(_ context.Context, r *http.Request) (interface{},
 		pagination = resInt
 	}
 
-	return searchMovieRequest{
+	return SearchMovieRequest{
 		SearchWord: searchWord,
 		Pagination: pagination,
 	}, nil

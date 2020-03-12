@@ -17,7 +17,7 @@ func NewLoggingService(logger log.Logger, s Service) Service {
 	return &loggingService{logger, s}
 }
 
-func (s *loggingService) SearchMovies(ctx context.Context, req searchMovieRequest) (res searchMovieResponse, err error) {
+func (s *loggingService) SearchMovies(ctx context.Context, req SearchMovieRequest) (res SearchMovieResponse, err error) {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "search",

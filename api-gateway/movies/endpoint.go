@@ -7,12 +7,12 @@ import (
 	"github.com/ranggakusuma/go-kit-example/movies/service"
 )
 
-type searchMovieRequest struct {
+type SearchMovieRequest struct {
 	SearchWord string `json:"searchWord"`
 	Pagination int    `json:"pagination"`
 }
 
-type searchMovieResponse struct {
+type SearchMovieResponse struct {
 	Search       []*service.Movie `json:"search"`
 	TotalResults int              `json:"totalResults"`
 	Err          error            `json:"error,omitempty"`
@@ -20,11 +20,11 @@ type searchMovieResponse struct {
 
 func makeMovieEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(searchMovieRequest)
+		req := request.(SearchMovieRequest)
 		v, err := s.SearchMovies(ctx, req)
 
 		if err != nil {
-			return searchMovieResponse{
+			return SearchMovieResponse{
 				Err: err,
 			}, nil
 		}
