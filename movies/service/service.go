@@ -36,19 +36,11 @@ func NewBasicMovieService() MovieService {
 
 func (basicMovieService) Search(ctx context.Context, searchWord string, pagination int) ([]*Movie, int, error) {
 
-	//client := &http.Client{}
 	apiKey := os.Getenv("OMDB_KEY")
 	m := map[string]interface{}{}
 	result := []*Movie{}
 
 	queryURL := fmt.Sprintf("%s?apikey=%s&s=%s&page=%d", utils.OmdbURL, apiKey, url.PathEscape(searchWord), pagination)
-	//req, err := http.NewRequest("GET", queryURL, bytes.NewBuffer(nil))
-
-	// if err != nil {
-	//	return nil, 0, err
-	// }
-
-	//res, err := client.Do(req)
 	res, err := http.Get(queryURL)
 	if err != nil {
 		return nil, 0, nil

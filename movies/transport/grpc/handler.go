@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"errors"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/transport/grpc"
@@ -16,7 +15,7 @@ type grpcServer struct {
 }
 
 // NewGRPCServer func
-func NewGRPCServer(endpoints endpoint.Endpoints, logger log.Logger) pb.MovieServer {
+func NewGRPCServer(_ context.Context, endpoints endpoint.Endpoints, logger log.Logger) pb.MovieServer {
 	return &grpcServer{search: makeSearchHandler(endpoints, []grpc.ServerOption{grpc.ServerErrorLogger(logger)})}
 }
 
@@ -37,16 +36,34 @@ func makeSearchHandler(endpoint endpoint.Endpoints, options []grpc.ServerOption)
 	return grpc.NewServer(endpoint.SearchEndpoint, decodeSearchRequest, encodeSearchResponse, options...)
 }
 
-// decodeSendEmailResponse is a transport/grpc.DecodeRequestFunc that converts a
-// gRPC request to a user-domain SendEmail request.
-// TODO implement the decoder
+// decodeSearchRequest is a transport/grpc.DecodeRequestFunc that converts a
 func decodeSearchRequest(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'Notificator' Decoder is not impelemented")
+	req := r.(*pb.SearchMovieRequest)
+	return endpoint.SearchRequest{
+		SearchWord: req.SearchWord,
+		Pagination: int(req.Pagination),
+	}, nil
 }
 
-// encodeSendEmailResponse is a transport/grpc.EncodeResponseFunc that converts
-// a user-domain response to a gRPC reply.
-// TODO implement the encoder
+// encodeSearchResponse is a transport/grpc.EncodeResponseFunc that converts
 func encodeSearchResponse(_ context.Context, r interface{}) (interface{}, error) {
-	return nil, errors.New("'Notificator' Encoder is not impelemented")
+	resp := r.(endpoint.SearchResponse)
+
+	list := make([]*pb.MovieAttr, 0)
+
+	for _, v := range resp.Search {
+		list = append(list, &pb.MovieAttr{
+			Title:  v.Title,
+			Year:   v.Year,
+			ImdbID: v.ImdbID,
+			Poster: v.Poster,
+			Type:   v.Type,
+		})
+	}
+
+	return &pb.SearchMovieResponse{
+		List:        list,
+		TotalResult: int64(resp.TotalResults),
+		Err:         resp.Err,
+	}, nil
 }

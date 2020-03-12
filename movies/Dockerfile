@@ -1,12 +1,25 @@
-FROM golang
+# Dockerfile References: https://docs.docker.com/engine/reference/builder/
 
-RUN mkdir -p /go/src/github.com/ranggakusuma/go-kit-example
+# Start from the latest golang base image
+FROM golang:latest
 
-ADD . /go/src/github.com/ranggakusuma/go-kit-example
+# Set the Current Working Directory inside the container
+WORKDIR /
 
-RUN go get  -t -v ./...
+# Copy go mod and sum files
+COPY go.mod go.sum ./
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
+
+# Copy the source from the current directory to the Working Directory inside the container
+COPY . .
+
+# Build the Go app
 RUN go build -o movies cmd/main.go
 
-EXPOSE 8080
+# Expose port 8081 to the outside world
+EXPOSE 8081
 
+# Command to run the executable
 CMD ["./movies"]

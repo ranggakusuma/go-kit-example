@@ -1,12 +1,24 @@
 version: "3"
 services:
   movies:
+    environment:
+      - OMDB_KEY=faf7e5bb
     build:
-      context: .
-      dockerfile: movies/Dockerfile
+      context: ./movies
+      dockerfile: Dockerfile
     restart: always
-    volumes:
-    - .:/go/src/github.com/ranggakusuma/go-kit-example
     container_name: movies
     ports:
-    - 8081:8081
+      - 8081:8081
+
+  api-gateway:
+    environment:
+      - MOVIE_GRPC_ADDRESS=movies:8081
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    restart: always
+    container_name: api-gateway
+    ports:
+      - 8080:8080
+  

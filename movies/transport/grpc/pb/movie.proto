@@ -26,4 +26,5 @@ message MovieAttr {
 message SearchMovieResponse {
 	repeated MovieAttr list = 1;
 	int64 totalResult = 2; 
+	string err = 3;
 }
